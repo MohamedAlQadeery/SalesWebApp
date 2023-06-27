@@ -1,6 +1,6 @@
 using SalesWebApp.Domain.ProductCategory;
 
-namespace SalesWebApp.Application.ProductCategories.Abstractions;
+namespace SalesWebApp.Application.Abstractions.Repositories;
 
 public interface IProductCategoryRepository
 {

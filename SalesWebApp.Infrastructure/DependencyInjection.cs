@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols;
-using SalesWebApp.Application.ProductCategories.Abstractions;
+using SalesWebApp.Application.Abstractions.Repositories;
 using SalesWebApp.Infrastructure.Persistence;
 using SalesWebApp.Infrastructure.Persistence.Repositories;
 
