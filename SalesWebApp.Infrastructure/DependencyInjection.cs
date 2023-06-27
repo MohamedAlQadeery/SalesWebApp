@@ -1,6 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols;
 using SalesWebApp.Application.ProductCategories.Abstractions;
+using SalesWebApp.Infrastructure.Persistence;
 using SalesWebApp.Infrastructure.Persistence.Repositories;
 
 namespace SalesWebApp.Infrastructure;
@@ -10,14 +13,16 @@ public static class DependencyInjection
 
 
     public static IServiceCollection AddInfrastructure(
-       this IServiceCollection services
-    //    ConfigurationManager configuration
+       this IServiceCollection services,
+       ConfigurationManager configuration
     )
     {
-        // services.AddDbContext<AppDbContext>(opt =>
-        // {
-        //     opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        // });
+
+
+        services.AddDbContext<AppDbContext>(opt =>
+        {
+            opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        });
 
         // services.AddScoped<AppDbContextInitialiser>();
 
