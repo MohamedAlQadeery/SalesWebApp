@@ -9,7 +9,8 @@ public class ProductCategoryEndpointDefinition : IEndpointDefintion
 {
     public void RegisterEndpoints(WebApplication app)
     {
-        app.MapPost("/api/product-categories", async (ISender mediatr, CreateProductCategoryRequest request) =>
+        var categories = app.MapGroup("/api/product-categories");
+        categories.MapPost("/", async (ISender mediatr, CreateProductCategoryRequest request) =>
            {
                var command = new CreateProductCategoryCommad(request.Name, request.Description, request.Image);
                var productCategory = await mediatr.Send(command);
@@ -23,7 +24,7 @@ public class ProductCategoryEndpointDefinition : IEndpointDefintion
            });
 
 
-        app.MapGet("/api/product-categories", async (ISender mediatr) =>
+        categories.MapGet("", async (ISender mediatr) =>
          {
              var catgories = await mediatr.Send(new GetAllProductCategoriesQuery());
 
