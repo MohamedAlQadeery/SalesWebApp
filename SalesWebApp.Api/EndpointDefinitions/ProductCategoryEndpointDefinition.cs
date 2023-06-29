@@ -5,7 +5,7 @@ using SalesWebApp.Application.ProductCategories.Commands;
 using SalesWebApp.Application.ProductCategories.Queries;
 
 namespace SalesWebApp.Api.EndpointDefinitions;
-public class ProductCategoryEndpointDefinition : IEndpointDefintion
+public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
 {
     public void RegisterEndpoints(WebApplication app)
     {
@@ -15,7 +15,7 @@ public class ProductCategoryEndpointDefinition : IEndpointDefintion
     }
 
 
-    private async Task<IResult> CreateProductCategory(ISender mediatr, CreateProductCategoryRequest request)
+    private async Task<IResult> CreateProductCategory(HttpContext context, ISender mediatr, CreateProductCategoryRequest request)
     {
         var command = new CreateProductCategoryCommad(request.Name, request.Description, request.Image);
         var productCategory = await mediatr.Send(command);
@@ -23,7 +23,7 @@ public class ProductCategoryEndpointDefinition : IEndpointDefintion
         return productCategory.Match(
               //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
               productCategory => TypedResults.Ok(productCategory),
-              errors => Results.BadRequest()
+              errors => ResultsProblem(context, errors)
           );
     }
 
