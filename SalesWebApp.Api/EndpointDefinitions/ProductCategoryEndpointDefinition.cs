@@ -18,7 +18,7 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
         // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
         categories.MapGet("", GetAllProductCategories);
-        // categories.MapGet("/{id}", GetProductCategoryById);
+        categories.MapGet("/{id}", GetProductCategoryById);
         categories.MapPut("/{id}", UpdateProductCategory);
         categories.MapDelete("/{id}", DeleteProductCategory);
     }
@@ -72,5 +72,15 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
         var catgories = await mediatr.Send(new GetAllProductCategoriesQuery());
 
         return TypedResults.Ok(catgories);
+    }
+
+    private async Task<IResult> GetProductCategoryById(HttpContext context, ISender mediatr, int id)
+    {
+        var categoryResult = await mediatr.Send(new GetProductCategoryByIdQuery(id));
+
+        return categoryResult.Match(
+            category => TypedResults.Ok(category),
+            errors => ResultsProblem(context, errors)
+        );
     }
 }
