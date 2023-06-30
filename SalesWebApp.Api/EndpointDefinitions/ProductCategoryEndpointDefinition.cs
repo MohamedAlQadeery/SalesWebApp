@@ -1,3 +1,4 @@
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebApp.Api.Abstractions;
@@ -18,30 +19,30 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
         // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
         categories.MapGet("", GetAllProductCategories);
-        categories.MapGet("/{id}", GetProductCategoryById);
+        categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
         categories.MapPut("/{id}", UpdateProductCategory);
         categories.MapDelete("/{id}", DeleteProductCategory);
     }
 
 
 
-    private async Task<IResult> CreateProductCategory(HttpContext context, ISender mediatr, CreateProductCategoryRequest request)
+    private async Task<IResult> CreateProductCategory(HttpContext context, ISender mediatr, IMapper mapper, CreateProductCategoryRequest request)
     {
-        var command = new CreateProductCategoryCommad(request.Name, request.Description, request.Image);
+        var command = mapper.Map<CreateProductCategoryCommad>(request);
         var productCategory = await mediatr.Send(command);
 
         return productCategory.Match(
-              //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
-              productCategory => TypedResults.Ok(productCategory),
+              productCategory => Results.CreatedAtRoute("GetProductCategoryById", new { id = productCategory.Id }, productCategory),
+              //productCategory => TypedResults.Ok(productCategory),
               errors => ResultsProblem(context, errors)
           );
     }
 
     //update product category
-    private async Task<IResult> UpdateProductCategory(HttpContext context,
+    private async Task<IResult> UpdateProductCategory(HttpContext context, IMapper mapper,
     ISender mediatr, int id, UpdateProductCategoryRequest request)
     {
-        var command = new UpdateProductCategoryCommand(id, request.Name, request.Description, request.Image);
+        var command = mapper.Map<UpdateProductCategoryCommand>((request, id));
         var productCategory = await mediatr.Send(command);
 
         return productCategory.Match(

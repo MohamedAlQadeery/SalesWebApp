@@ -1,6 +1,7 @@
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using SalesApp.Api.Common.Mappings;
 using SalesWebApp.Api.Abstractions;
 using SalesWebApp.Api.Common.Errors;
 using SalesWebApp.Api.Common.Services;
@@ -17,6 +18,7 @@ public static class DependancyInjection
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddMappings();
         services.AddValidationFilter();
         services.AddSingleton<ProblemDetailsFactory, SalesAppProblemDetailsFactory>();
         services.AddScoped<IImageService, ImageService>();
