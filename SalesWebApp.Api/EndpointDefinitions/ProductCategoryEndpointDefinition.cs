@@ -5,6 +5,7 @@ using SalesWebApp.Api.Common.Validation;
 using SalesWebApp.Api.Contracts.ProductCategory.Request;
 using SalesWebApp.Api.Contracts.ProductCategory.Validator;
 using SalesWebApp.Application.ProductCategories.Commands;
+using SalesWebApp.Application.ProductCategories.Commands.DeleteProductCategory;
 using SalesWebApp.Application.ProductCategories.Queries;
 
 namespace SalesWebApp.Api.EndpointDefinitions;
@@ -19,6 +20,7 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
         categories.MapGet("", GetAllProductCategories);
         // categories.MapGet("/{id}", GetProductCategoryById);
         categories.MapPut("/{id}", UpdateProductCategory);
+        categories.MapDelete("/{id}", DeleteProductCategory);
     }
 
 
@@ -48,6 +50,21 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
               errors => ResultsProblem(context, errors)
           );
     }
+
+
+    private async Task<IResult> DeleteProductCategory(HttpContext context,
+    ISender mediatr, int id)
+    {
+        var command = new DeleteProductCategoryCommand(id);
+        var deleteResult = await mediatr.Send(command);
+
+        return deleteResult.Match(
+              //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
+              productCategory => TypedResults.NoContent(),
+              errors => ResultsProblem(context, errors)
+          );
+    }
+
 
 
     private async Task<IResult> GetAllProductCategories(ISender mediatr)
