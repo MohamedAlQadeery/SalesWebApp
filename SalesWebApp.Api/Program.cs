@@ -1,19 +1,13 @@
 using SalesWebApp.Infrastructure;
 using SalesWebApp.Application;
-using MediatR;
-using SalesWebApp.Api.Contracts.ProductCategory.Request;
-using SalesWebApp.Application.ProductCategories.Commands;
-using SalesWebApp.Application.ProductCategories.Queries;
 using SalesWebApp.Api.Extensions;
+using SalesWebApp.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    // Add services to the container.
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddValidationFilter();
-    builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
+    builder.Services
+    .AddPresentaion()
+    .AddApplication().AddInfrastructure(builder.Configuration);
 }
 var app = builder.Build();
 {
