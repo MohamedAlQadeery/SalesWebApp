@@ -30,6 +30,7 @@ public sealed class ProductCategory : BaseEntity<int>
         Name = name;
         Description = description;
         Image = image ?? Image;
+        UpdatedDateTime = DateTime.Now;
     }
 
 

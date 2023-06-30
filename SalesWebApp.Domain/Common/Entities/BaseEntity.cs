@@ -4,7 +4,7 @@ public abstract class BaseEntity<TId>
 {
     public TId Id { get; private set; } = default!;
     public DateTime CreatedDateTime { get; private set; } = DateTime.Now;
-    public DateTime? UpdatedDateTime { get; private set; }
+    public DateTime? UpdatedDateTime { get; protected set; }
     public bool IsActive { get; private set; } = true;
 
 

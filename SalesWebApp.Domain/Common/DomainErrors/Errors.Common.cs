@@ -11,6 +11,11 @@ public static partial class Errors
 
         public static Error InvalidName =>
             Error.Validation(code: "InvalidName", description: "Name is invalid");
+
+
+        //not found 
+        public static Error NotFound =>
+            Error.NotFound(code: "NotFound", description: "Resource Not found");
     }
 
 
