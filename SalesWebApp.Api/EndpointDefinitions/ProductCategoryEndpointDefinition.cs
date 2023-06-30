@@ -13,8 +13,8 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
     public void RegisterEndpoints(WebApplication app)
     {
         var categories = app.MapGroup("/api/product-categories");
-        categories.MapPost("/", CreateProductCategory)
-        .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
+        categories.MapPost("/", CreateProductCategory);
+        // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
         categories.MapGet("", GetAllProductCategories);
     }
@@ -22,7 +22,7 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
 
     private async Task<IResult> CreateProductCategory(HttpContext context, ISender mediatr, CreateProductCategoryRequest request)
     {
-        var command = new CreateProductCategoryCommad(request.Name, request.Description, "request.Image");
+        var command = new CreateProductCategoryCommad(request.Name, request.Description, request.Image);
         var productCategory = await mediatr.Send(command);
 
         return productCategory.Match(
