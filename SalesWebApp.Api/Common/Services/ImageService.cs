@@ -58,12 +58,13 @@ public class ImageService : IImageService
         //images/jpg
         using Image input = Image.Load(filePath);
         input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(457, 666) }));
+
         await input.SaveAsync(folderBig);
 
-        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Crop, Size = new Size(518, 388) }));
+        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(518, 388) }));
         await input.SaveAsync(folderMedi);
 
-        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Crop, Size = new Size(340, 220) }));
+        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(340, 220) }));
         await input.SaveAsync(folderSmall);
     }
 
@@ -125,7 +126,12 @@ public class ImageService : IImageService
 
         using (Image input = Image.Load(filePath))
         {
-            input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Crop, Size = new Size(199, 131) }));
+            //input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Crop, Size = new Size(199, 131) }));
+            input.Mutate(x => x.Resize(new ResizeOptions
+            {
+                Size = new Size(199, 131),
+                Mode = ResizeMode.Max
+            }));
             await input.SaveAsync(folderSmall);
 
         }
@@ -140,6 +146,11 @@ public class ImageService : IImageService
         if (!imageFile.ContentType.StartsWith("image/"))
         {
             return Errors.CommonErrors.Images.InvalidImageFormat;
+        }
+
+        if (!ValidateImageDimension(imageFile, width, height))
+        {
+            return Errors.CommonErrors.Images.InvalidDimension;
         }
 
         // ContentType = "image/jpeg"
@@ -177,7 +188,7 @@ public class ImageService : IImageService
         return fileName;
     }
 
-    public ErrorOr<bool> ValidateImageDimension(IFormFile image, int width, int height)
+    public bool ValidateImageDimension(IFormFile image, int width, int height)
     {
 
         using var stream = image.OpenReadStream();
@@ -185,7 +196,7 @@ public class ImageService : IImageService
         if (imageSharp.Width < width || imageSharp.Height < height)
         {
 
-            return Errors.CommonErrors.Images.InvalidDimension;
+            return false;
         }
 
         return true;

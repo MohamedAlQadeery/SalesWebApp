@@ -12,5 +12,5 @@ public interface IImageService
 
     Task ResizeImageAsync(string filePath, string uploadedFolder, string fileName);
 
-    ErrorOr<bool> ValidateImageDimension(IFormFile image, int width, int height);
+    bool ValidateImageDimension(IFormFile image, int width, int height);
 }
