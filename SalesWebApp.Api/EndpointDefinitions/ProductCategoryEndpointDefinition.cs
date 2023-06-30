@@ -1,6 +1,9 @@
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using SalesWebApp.Api.Abstractions;
+using SalesWebApp.Api.Common.Validation;
 using SalesWebApp.Api.Contracts.ProductCategory.Request;
+using SalesWebApp.Api.Contracts.ProductCategory.Validator;
 using SalesWebApp.Application.ProductCategories.Commands;
 using SalesWebApp.Application.ProductCategories.Queries;
 
@@ -10,14 +13,16 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
     public void RegisterEndpoints(WebApplication app)
     {
         var categories = app.MapGroup("/api/product-categories");
-        categories.MapPost("/", CreateProductCategory);
+        categories.MapPost("/", CreateProductCategory)
+        .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
+
         categories.MapGet("", GetAllProductCategories);
     }
 
 
     private async Task<IResult> CreateProductCategory(HttpContext context, ISender mediatr, CreateProductCategoryRequest request)
     {
-        var command = new CreateProductCategoryCommad(request.Name, request.Description, request.Image);
+        var command = new CreateProductCategoryCommad(request.Name, request.Description, "request.Image");
         var productCategory = await mediatr.Send(command);
 
         return productCategory.Match(
