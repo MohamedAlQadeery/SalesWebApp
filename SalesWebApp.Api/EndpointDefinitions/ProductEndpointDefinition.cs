@@ -20,7 +20,7 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
         products.MapPost("/", CreateProduct);
         // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
-        // categories.MapGet("", GetAllProductCategories);
+        products.MapGet("", GetAllProduct);
         // categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
         // categories.MapPut("/{id}", UpdateProductCategory);
         // categories.MapDelete("/{id}", DeleteProductCategory);
@@ -45,11 +45,11 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
 
 
 
-    private async Task<IResult> GetAllProductCategories(ISender mediatr)
+    private async Task<IResult> GetAllProduct(ISender mediatr, IMapper mapper)
     {
-        var catgories = await mediatr.Send(new GetAllProductCategoriesQuery());
+        var products = await mediatr.Send(new GetAllProductsQuery());
 
-        return TypedResults.Ok(catgories);
+        return TypedResults.Ok(mapper.Map<List<ProductResponse>>(products));
     }
 
 
