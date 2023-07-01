@@ -8,8 +8,8 @@ using SalesWebApp.Domain.ProductEntity.Entities;
 namespace SalesWebApp.Domain.ProductEntity;
 public class Product : BaseEntity<int>
 {
-    private readonly List<ProductSpecification> _productSpecificationsIds = new();
-    private readonly List<ProductAttachments> _productAttachmentsIds = new();
+    private readonly List<ProductSpecification> _productSpecifications = new();
+    private readonly List<ProductAttachments> _productAttachments = new();
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public Price ProjectOwnerPrice { get; private set; } = null!;
@@ -19,8 +19,8 @@ public class Product : BaseEntity<int>
     public string Thumbnail { get; private set; }
 
 
-    public IReadOnlyCollection<ProductSpecification> ProductSpecificationsIds => _productSpecificationsIds.AsReadOnly();
-    public IReadOnlyCollection<ProductAttachments> ProductAttachmentsIds => _productAttachmentsIds.AsReadOnly();
+    public IReadOnlyCollection<ProductSpecification> ProductSpecifications => _productSpecifications.AsReadOnly();
+    public IReadOnlyCollection<ProductAttachments> ProductAttachments => _productAttachments.AsReadOnly();
 
 
 
@@ -45,7 +45,6 @@ public class Product : BaseEntity<int>
         Price customerPrice,
         int quantity,
         int categoryId,
-        ProductCategory category,
         bool isAvailable,
         string thumbnail,
         List<ProductSpecification> productSpecifications)
@@ -57,9 +56,8 @@ public class Product : BaseEntity<int>
         CustomerPrice = customerPrice;
         Quantity = quantity;
         CategoryId = categoryId;
-        Category = category;
         IsAvailable = isAvailable;
-        _productSpecificationsIds.AddRange(productSpecifications);
+        _productSpecifications.AddRange(productSpecifications);
         Thumbnail = thumbnail;
     }
 
@@ -73,7 +71,6 @@ public class Product : BaseEntity<int>
         Price customerPrice,
         int quantity,
         int categoryId,
-        ProductCategory category,
         bool isAvailable,
         List<ProductSpecification> productSpecifications,
         string thumbnail)
@@ -91,7 +88,6 @@ public class Product : BaseEntity<int>
             customerPrice,
             quantity,
             categoryId,
-            category,
             isAvailable,
             thumbnail,
             productSpecifications
@@ -109,7 +105,6 @@ public class Product : BaseEntity<int>
         Price customerPrice,
         int quantity,
         int categoryId,
-        ProductCategory category,
         bool isAvailable, string? thumbnail)
     {
         Name = name;
@@ -119,7 +114,6 @@ public class Product : BaseEntity<int>
         CustomerPrice = customerPrice;
         Quantity = quantity;
         CategoryId = categoryId;
-        Category = category;
         IsAvailable = isAvailable;
         UpdatedDateTime = DateTime.Now;
         //if thumbnail is null, then do not update it
@@ -128,22 +122,22 @@ public class Product : BaseEntity<int>
 
     public void AddProductSpecification(ProductSpecification productSpecification)
     {
-        _productSpecificationsIds.Add(productSpecification);
+        _productSpecifications.Add(productSpecification);
     }
 
     public void RemoveProductSpecification(ProductSpecification productSpecification)
     {
-        _productSpecificationsIds.Remove(productSpecification);
+        _productSpecifications.Remove(productSpecification);
     }
 
     public void AddProductAttachment(ProductAttachments productAttachment)
     {
-        _productAttachmentsIds.Add(productAttachment);
+        _productAttachments.Add(productAttachment);
     }
 
     public void RemoveProductAttachment(ProductAttachments productAttachment)
     {
-        _productAttachmentsIds.Remove(productAttachment);
+        _productAttachments.Remove(productAttachment);
     }
 
 

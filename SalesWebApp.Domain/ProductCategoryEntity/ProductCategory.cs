@@ -6,12 +6,14 @@ namespace SalesWebApp.Domain.ProductCategoryEntity;
 public sealed class ProductCategory : BaseEntity<int>
 {
 
-    private readonly List<int> _productsIds = new();
+    private readonly List<Product> _products = new();
+
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public string? Image { get; private set; }
 
-    public IReadOnlyCollection<int> ProductsIds => _productsIds.AsReadOnly();
+    public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
+
 
 
     private ProductCategory()
@@ -38,15 +40,6 @@ public sealed class ProductCategory : BaseEntity<int>
         UpdatedDateTime = DateTime.Now;
     }
 
-    public void AddProduct(Product product)
-    {
-        _productsIds.Add(product.Id);
-    }
-
-    public void RemoveProduct(Product product)
-    {
-        _productsIds.Remove(product.Id);
-    }
 
 
 

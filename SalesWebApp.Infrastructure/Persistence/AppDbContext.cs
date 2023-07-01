@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SalesWebApp.Domain.ProductCategoryEntity;
+using SalesWebApp.Domain.ProductEntity;
 
 namespace SalesWebApp.Infrastructure.Persistence;
 
@@ -17,5 +18,10 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<ProductCategory> ProductCategories { get; set; } = null!;
+    public DbSet<Product> Products { get; set; } = null!;
+
+
+
+
 
 }
