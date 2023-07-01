@@ -1,14 +1,7 @@
 using MapsterMapper;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using SalesWebApp.Api.Abstractions;
-using SalesWebApp.Api.Common.Validation;
-using SalesWebApp.Api.Contracts.ProductCategory.Request;
-using SalesWebApp.Api.Contracts.ProductCategory.Validator;
 using SalesWebApp.Api.Contracts.Products;
-using SalesWebApp.Application.ProductCategories.Commands;
-using SalesWebApp.Application.ProductCategories.Commands.DeleteProductCategory;
-using SalesWebApp.Application.ProductCategories.Queries;
 using SalesWebApp.Application.Products.Commands;
 
 namespace SalesWebApp.Api.EndpointDefinitions;
@@ -21,9 +14,9 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
         // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
         products.MapGet("", GetAllProduct);
-        // categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
+        products.MapGet("/{id}", GetProductById).WithName("GetProductById");
         products.MapPut("/{id}", UpdateProduct);
-        // categories.MapDelete("/{id}", DeleteProductCategory);
+        products.MapDelete("/{id}", DeleteProductCategory);
     }
 
 
@@ -35,8 +28,8 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
         var productResult = await mediatr.Send(command);
 
         return productResult.Match(
-              // productCategory => Results.CreatedAtRoute("GetProductCategoryById", new { id = productCategory.Id }, productCategory),
-              product => TypedResults.Ok(mapper.Map<ProductResponse>(product)),
+               product => Results.CreatedAtRoute("GetProductById", new { id = product.Id }, product),
+              // product => TypedResults.Ok(mapper.Map<ProductResponse>(product)),
               errors => ResultsProblem(context, errors)
           );
     }
@@ -65,5 +58,26 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
               errors => ResultsProblem(context, errors)
           );
     }
+
+    private async Task<IResult> GetProductById(HttpContext content, ISender mediatr, IMapper mapper, int id)
+    {
+        var product = await mediatr.Send(new GetProductById(id));
+
+        return product.Match(
+              product => TypedResults.Ok(mapper.Map<ProductResponse>(product)),
+              errors => ResultsProblem(content, errors)
+          );
+    }
+
+    private async Task<IResult> DeleteProductCategory(HttpContext context, ISender mediatr, int id)
+    {
+        var result = await mediatr.Send(new DeleteProductCommand(id));
+
+        return result.Match(
+              unit => Results.NoContent(),
+              errors => ResultsProblem(context, errors)
+          );
+    }
+
 
 }
