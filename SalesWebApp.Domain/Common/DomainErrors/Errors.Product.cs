@@ -7,5 +7,9 @@ public static partial class Errors
 
         public static Error MustHaveSpecification =>
          Error.Validation(code: "MustHaveSpecification", description: "Product must have at least one specification");
+
+        //category not found
+        public static Error CategoryNotFound =>
+        Error.Validation(code: "CategoryNotFound", description: "Category not found");
     }
 }

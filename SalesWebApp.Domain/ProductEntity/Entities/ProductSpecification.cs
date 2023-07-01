@@ -10,7 +10,7 @@ public sealed class ProductSpecification : BaseEntity<int>
     public float Height { get; private set; }
     public float Width { get; private set; }
 
-    public string Color { get; set; } = null!;
+    public string Color { get; private set; } = null!;
 
     //Empty constructor for EF Core
     private ProductSpecification()

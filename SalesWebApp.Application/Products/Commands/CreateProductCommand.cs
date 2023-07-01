@@ -11,16 +11,29 @@ namespace SalesWebApp.Application.Products.Commands;
 public record CreateProductCommand(
     string Name,
     string Description,
-    Price ProjectOwnerPrice,
-    Price SalesmanPrice,
-    Price CustomerPrice,
+    PriceCommand ProjectOwnerPrice,
+    PriceCommand SalesmanPrice,
+    PriceCommand CustomerPrice,
     int Quantity,
     int CategoryId,
     bool IsAvailable,
-    List<ProductSpecification> ProductSpecifications,
+    List<ProductSpecificationCommand> ProductSpecifications,
     string Thumbnail
 ) : IRequest<ErrorOr<Product>>;
 
+
+public record PriceCommand(
+    decimal Value,
+    string Currency
+);
+
+public record ProductSpecificationCommand(
+    float Weight,
+    string WeightUnit,
+    float Height,
+    float Width,
+    string Color
+);
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ErrorOr<Product>>
 {
@@ -31,16 +44,30 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     }
     public async Task<ErrorOr<Product>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
+
+        var category = await _unitOfWork.ProductCategories.GetByIdAsync(request.CategoryId);
+        if (category is null) { return Errors.Product.CategoryNotFound; }
+
+        //for each product specification create a new ProductSpecification entity
+        var productSpecifications = CreateProductSpecifications(request.ProductSpecifications);
+
+        //manage prices
+        var projectOwnerPrice = Price.Create(request.ProjectOwnerPrice.Value, request.ProjectOwnerPrice.Currency);
+        var salesmanPrice = Price.Create(request.SalesmanPrice.Value, request.SalesmanPrice.Currency);
+        var customerPrice = Price.Create(request.CustomerPrice.Value, request.CustomerPrice.Currency);
+
+
+
         var product = Product.Create(
             request.Name,
             request.Description,
-            request.ProjectOwnerPrice,
-            request.SalesmanPrice,
-            request.CustomerPrice,
+            projectOwnerPrice,
+            salesmanPrice,
+            customerPrice,
             request.Quantity,
             request.CategoryId,
             request.IsAvailable,
-            request.ProductSpecifications,
+            productSpecifications,
             request.Thumbnail
         );
 
@@ -51,4 +78,24 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         return product;
 
     }
+
+    private List<ProductSpecification> CreateProductSpecifications(List<ProductSpecificationCommand> productSpecifications)
+    {
+        var productSpecificationsList = new List<ProductSpecification>();
+        foreach (var productSpecificationCommand in productSpecifications)
+        {
+            var productSpecification = ProductSpecification.Create(
+                productSpecificationCommand.Weight,
+                productSpecificationCommand.WeightUnit,
+                productSpecificationCommand.Height,
+                productSpecificationCommand.Width,
+                productSpecificationCommand.Color
+            );
+            productSpecificationsList.Add(productSpecification);
+        }
+
+        return productSpecificationsList;
+    }
+
+
 }
