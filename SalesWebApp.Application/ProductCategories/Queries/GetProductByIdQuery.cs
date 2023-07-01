@@ -11,14 +11,14 @@ public record GetProductCategoryByIdQuery(int Id) : IRequest<ErrorOr<ProductCate
 
 public class GetProductCategoryByIdQueryHandler : IRequestHandler<GetProductCategoryByIdQuery, ErrorOr<ProductCategory>>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-    public GetProductCategoryByIdQueryHandler(IProductCategoryRepository productCategoryRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public GetProductCategoryByIdQueryHandler(IUnitOfWork unitOfWork)
     {
-        _productCategoryRepository = productCategoryRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<ErrorOr<ProductCategory>> Handle(GetProductCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id);
+        var productCategory = await _unitOfWork.ProductCategories.GetByIdAsync(request.Id);
 
         if (productCategory is null) { return Errors.Common.NotFound; }
         return productCategory;

@@ -7,13 +7,13 @@ public record GetAllProductCategoriesQuery() : IRequest<IReadOnlyList<ProductCat
 
 public class GetAllProductCategoriesQueryHandler : IRequestHandler<GetAllProductCategoriesQuery, IReadOnlyList<ProductCategory>>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-    public GetAllProductCategoriesQueryHandler(IProductCategoryRepository productCategoryRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public GetAllProductCategoriesQueryHandler(IUnitOfWork unitOfWork)
     {
-        _productCategoryRepository = productCategoryRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<IReadOnlyList<ProductCategory>> Handle(GetAllProductCategoriesQuery request, CancellationToken cancellationToken)
     {
-        return await _productCategoryRepository.GetAllAsync();
+        return await _unitOfWork.ProductCategories.GetAllAsync();
     }
 }

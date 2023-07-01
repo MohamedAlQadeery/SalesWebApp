@@ -50,7 +50,8 @@ public static class DependencyInjection
     {
 
         //services.AddScoped<PublishDomainEventsInterceptor>();
-        services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        // services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 
 
         return services;

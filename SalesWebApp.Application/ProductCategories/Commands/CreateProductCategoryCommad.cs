@@ -10,16 +10,18 @@ public record CreateProductCategoryCommad(string Name, string Description, strin
 
 public class CreateProductCategoryCommadHandler : IRequestHandler<CreateProductCategoryCommad, ErrorOr<ProductCategory>>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-    public CreateProductCategoryCommadHandler(IProductCategoryRepository productCategoryRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public CreateProductCategoryCommadHandler(IUnitOfWork unitOfWork)
     {
-        _productCategoryRepository = productCategoryRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<ProductCategory>> Handle(CreateProductCategoryCommad request, CancellationToken cancellationToken)
     {
         var productCategory = ProductCategory.Create(request.Name, request.Description, request.Image);
-        await _productCategoryRepository.AddAsync(productCategory);
+        await _unitOfWork.ProductCategories.AddAsync(productCategory);
+        await _unitOfWork.SaveChangesAsync();
+
         return productCategory;
 
     }

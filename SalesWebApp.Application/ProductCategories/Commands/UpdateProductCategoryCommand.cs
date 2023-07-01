@@ -11,14 +11,14 @@ IRequest<ErrorOr<ProductCategory>>;
 
 public class UpdateProductCategoryCommandHandler : IRequestHandler<UpdateProductCategoryCommand, ErrorOr<ProductCategory>>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-    public UpdateProductCategoryCommandHandler(IProductCategoryRepository productCategoryRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public UpdateProductCategoryCommandHandler(IUnitOfWork unitOfWork)
     {
-        _productCategoryRepository = productCategoryRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<ErrorOr<ProductCategory>> Handle(UpdateProductCategoryCommand request, CancellationToken cancellationToken)
     {
-        var categoryToUpdate = await _productCategoryRepository.GetByIdAsync(request.Id);
+        var categoryToUpdate = await _unitOfWork.ProductCategories.GetByIdAsync(request.Id);
         if (categoryToUpdate is null)
         {
             return Errors.Common.NotFound;
@@ -26,7 +26,8 @@ public class UpdateProductCategoryCommandHandler : IRequestHandler<UpdateProduct
 
         categoryToUpdate.Update(request.Name, request.Description, request.Image ?? null);
 
-        var updatedCategory = await _productCategoryRepository.UpdateAsync(categoryToUpdate);
+        var updatedCategory = _unitOfWork.ProductCategories.Update(categoryToUpdate);
+        await _unitOfWork.SaveChangesAsync();
 
         return updatedCategory;
     }

@@ -118,6 +118,8 @@ public class Product : BaseEntity<int>
         UpdatedDateTime = DateTime.Now;
         //if thumbnail is null, then do not update it
         Thumbnail = thumbnail ?? Thumbnail;
+
+        UpdatedDateTime = DateTime.Now;
     }
 
     public void AddProductSpecification(ProductSpecification productSpecification)

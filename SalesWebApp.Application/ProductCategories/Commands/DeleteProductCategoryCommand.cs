@@ -9,17 +9,19 @@ public record DeleteProductCategoryCommand(int Id) : IRequest<ErrorOr<Unit>>;
 
 public class DeleteProductCategoryCommandHandler : IRequestHandler<DeleteProductCategoryCommand, ErrorOr<Unit>>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-    public DeleteProductCategoryCommandHandler(IProductCategoryRepository productCategoryRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public DeleteProductCategoryCommandHandler(IUnitOfWork unitOfWork)
     {
-        _productCategoryRepository = productCategoryRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<ErrorOr<Unit>> Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
     {
-        var productTodelete = await _productCategoryRepository.GetByIdAsync(request.Id);
+        var productTodelete = await _unitOfWork.ProductCategories.GetByIdAsync(request.Id);
         if (productTodelete is null) { return Errors.Common.NotFound; }
 
-        await _productCategoryRepository.DeleteAsync(productTodelete);
+        _unitOfWork.ProductCategories.Delete(productTodelete);
+
+        await _unitOfWork.SaveChangesAsync();
         return Unit.Value;
 
 
