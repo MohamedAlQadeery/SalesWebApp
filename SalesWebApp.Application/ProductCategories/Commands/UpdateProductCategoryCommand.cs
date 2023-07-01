@@ -1,8 +1,8 @@
 using ErrorOr;
 using MediatR;
-using SalesApp.Domain.Common.DomainErrors;
+using SalesWebApp.Domain.Common.DomainErrors;
 using SalesWebApp.Application.Abstractions.Repositories;
-using SalesWebApp.Domain.ProductCategory;
+using SalesWebApp.Domain.ProductCategoryEntity;
 
 namespace SalesWebApp.Application.ProductCategories.Commands;
 

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SalesWebApp.Domain.ProductCategory;
+using SalesWebApp.Domain.ProductCategoryEntity;
 
 namespace SalesWebApp.Infrastructure.Persistence;
 

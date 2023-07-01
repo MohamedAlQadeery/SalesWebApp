@@ -1,7 +1,7 @@
 using ErrorOr;
 using MediatR;
 using SalesWebApp.Application.Abstractions.Repositories;
-using SalesWebApp.Domain.ProductCategory;
+using SalesWebApp.Domain.ProductCategoryEntity;
 
 namespace SalesWebApp.Application.ProductCategories.Commands;
 

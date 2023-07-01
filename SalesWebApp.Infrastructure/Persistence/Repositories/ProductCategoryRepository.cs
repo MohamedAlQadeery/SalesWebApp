@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SalesWebApp.Application.Abstractions.Repositories;
-using SalesWebApp.Domain.ProductCategory;
+using SalesWebApp.Domain.ProductCategoryEntity;
 
 namespace SalesWebApp.Infrastructure.Persistence.Repositories;
 

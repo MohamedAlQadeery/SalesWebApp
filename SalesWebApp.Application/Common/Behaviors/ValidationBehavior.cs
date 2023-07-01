@@ -4,7 +4,7 @@ using FluentValidation;
 
 using MediatR;
 
-namespace SalesApp.Application.Common.Behaviors;
+namespace SalesWebApp.Application.Common.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> :
     IPipelineBehavior<TRequest, TResponse>

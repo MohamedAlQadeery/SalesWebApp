@@ -2,7 +2,7 @@ using System.Reflection;
 using Mapster;
 using MapsterMapper;
 
-namespace SalesApp.Api.Common.Mappings;
+namespace SalesWebApp.Api.Common.Mappings;
 
 public static class DependancyInjection
 {

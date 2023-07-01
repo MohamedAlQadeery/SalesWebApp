@@ -1,6 +1,6 @@
 using ErrorOr;
 using MediatR;
-using SalesApp.Domain.Common.DomainErrors;
+using SalesWebApp.Domain.Common.DomainErrors;
 using SalesWebApp.Application.Abstractions.Repositories;
 
 namespace SalesWebApp.Application.ProductCategories.Commands.DeleteProductCategory;

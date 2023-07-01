@@ -1,7 +1,7 @@
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using SalesApp.Api.Common.Mappings;
+using SalesWebApp.Api.Common.Mappings;
 using SalesWebApp.Api.Abstractions;
 using SalesWebApp.Api.Common.Errors;
 using SalesWebApp.Api.Common.Services;

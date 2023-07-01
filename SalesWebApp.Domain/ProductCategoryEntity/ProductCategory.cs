@@ -1,12 +1,17 @@
 using SalesWebApp.Domain.Common.Entities;
+using SalesWebApp.Domain.ProductEntity;
 
-namespace SalesWebApp.Domain.ProductCategory;
+namespace SalesWebApp.Domain.ProductCategoryEntity;
 
 public sealed class ProductCategory : BaseEntity<int>
 {
+
+    private readonly List<int> _productsIds = new();
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public string? Image { get; private set; }
+
+    public IReadOnlyCollection<int> ProductsIds => _productsIds.AsReadOnly();
 
 
     private ProductCategory()
@@ -32,6 +37,18 @@ public sealed class ProductCategory : BaseEntity<int>
         Image = image ?? Image;
         UpdatedDateTime = DateTime.Now;
     }
+
+    public void AddProduct(Product product)
+    {
+        _productsIds.Add(product.Id);
+    }
+
+    public void RemoveProduct(Product product)
+    {
+        _productsIds.Remove(product.Id);
+    }
+
+
 
 
 

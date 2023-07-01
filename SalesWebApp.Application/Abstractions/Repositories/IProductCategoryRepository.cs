@@ -1,4 +1,4 @@
-using SalesWebApp.Domain.ProductCategory;
+using SalesWebApp.Domain.ProductCategoryEntity;
 
 namespace SalesWebApp.Application.Abstractions.Repositories;
 

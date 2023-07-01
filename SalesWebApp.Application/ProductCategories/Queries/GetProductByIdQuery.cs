@@ -1,9 +1,9 @@
 using ErrorOr;
 using MediatR;
 using SalesWebApp.Application.Abstractions.Repositories;
-using SalesApp.Domain.Common.DomainErrors;
+using SalesWebApp.Domain.Common.DomainErrors;
 
-using SalesWebApp.Domain.ProductCategory;
+using SalesWebApp.Domain.ProductCategoryEntity;
 
 namespace SalesWebApp.Application.ProductCategories.Queries;
 public record GetProductCategoryByIdQuery(int Id) : IRequest<ErrorOr<ProductCategory>>;

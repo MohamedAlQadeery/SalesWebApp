@@ -1,6 +1,6 @@
 using SalesWebApp.Domain.Common.Models;
 
-namespace SalesApp.Domain.Common.ValueObjects;
+namespace SalesWebApp.Domain.Common.ValueObjects;
 public sealed class Address : ValueObject
 {
     public string Street { get; private set; }

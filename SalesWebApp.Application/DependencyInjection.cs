@@ -6,7 +6,7 @@ using FluentValidation;
 using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
-using SalesApp.Application.Common.Behaviors;
+using SalesWebApp.Application.Common.Behaviors;
 
 namespace SalesWebApp.Application;
 
