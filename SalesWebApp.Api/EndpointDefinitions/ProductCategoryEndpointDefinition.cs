@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebApp.Api.Abstractions;
 using SalesWebApp.Api.Common.Validation;
+using SalesWebApp.Api.Contracts.ProductCategory;
 using SalesWebApp.Api.Contracts.ProductCategory.Request;
 using SalesWebApp.Api.Contracts.ProductCategory.Validator;
 using SalesWebApp.Application.ProductCategories.Commands;
@@ -32,7 +33,8 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
         var productCategory = await mediatr.Send(command);
 
         return productCategory.Match(
-              productCategory => Results.CreatedAtRoute("GetProductCategoryById", new { id = productCategory.Id }, productCategory),
+              productCategory => Results.CreatedAtRoute("GetProductCategoryById", new { id = productCategory.Id },
+               mapper.Map<ProductCategoryResponse>(productCategory)),
               //productCategory => TypedResults.Ok(productCategory),
               errors => ResultsProblem(context, errors)
           );
@@ -47,7 +49,7 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
 
         return productCategory.Match(
               //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
-              productCategory => TypedResults.Ok(productCategory),
+              productCategory => TypedResults.Ok(mapper.Map<ProductCategoryResponse>(productCategory)),
               errors => ResultsProblem(context, errors)
           );
     }
@@ -68,19 +70,19 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
 
 
 
-    private async Task<IResult> GetAllProductCategories(ISender mediatr)
+    private async Task<IResult> GetAllProductCategories(ISender mediatr, IMapper mapper)
     {
         var catgories = await mediatr.Send(new GetAllProductCategoriesQuery());
 
-        return TypedResults.Ok(catgories);
+        return TypedResults.Ok(mapper.Map<IEnumerable<ProductCategoryResponse>>(catgories));
     }
 
-    private async Task<IResult> GetProductCategoryById(HttpContext context, ISender mediatr, int id)
+    private async Task<IResult> GetProductCategoryById(HttpContext context, IMapper mapper, ISender mediatr, int id)
     {
         var categoryResult = await mediatr.Send(new GetProductCategoryByIdQuery(id));
 
         return categoryResult.Match(
-            category => TypedResults.Ok(category),
+            category => TypedResults.Ok(mapper.Map<ProductCategoryResponse>(category)),
             errors => ResultsProblem(context, errors)
         );
     }

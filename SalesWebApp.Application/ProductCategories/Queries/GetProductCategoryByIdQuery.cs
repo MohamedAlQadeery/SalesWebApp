@@ -18,7 +18,8 @@ public class GetProductCategoryByIdQueryHandler : IRequestHandler<GetProductCate
     }
     public async Task<ErrorOr<ProductCategory>> Handle(GetProductCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var productCategory = await _unitOfWork.ProductCategories.GetByIdAsync(request.Id);
+        var productCategory = await _unitOfWork.ProductCategories
+        .FindAsync(productCategory => productCategory.Id == request.Id, new string[] { "Products" });
 
         if (productCategory is null) { return Errors.Common.NotFound; }
         return productCategory;

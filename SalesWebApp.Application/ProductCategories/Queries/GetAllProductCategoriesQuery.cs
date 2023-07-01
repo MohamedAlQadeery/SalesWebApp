@@ -14,6 +14,6 @@ public class GetAllProductCategoriesQueryHandler : IRequestHandler<GetAllProduct
     }
     public async Task<IReadOnlyList<ProductCategory>> Handle(GetAllProductCategoriesQuery request, CancellationToken cancellationToken)
     {
-        return await _unitOfWork.ProductCategories.GetAllAsync();
+        return await _unitOfWork.ProductCategories.GetAllAsync(new string[] { "Products" });
     }
 }
