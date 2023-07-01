@@ -22,7 +22,7 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
 
         products.MapGet("", GetAllProduct);
         // categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
-        // categories.MapPut("/{id}", UpdateProductCategory);
+        products.MapPut("/{id}", UpdateProduct);
         // categories.MapDelete("/{id}", DeleteProductCategory);
     }
 
@@ -52,5 +52,18 @@ public class ProductEndpointDefinition : BaseEndpointDefinition, IEndpointDefint
         return TypedResults.Ok(mapper.Map<List<ProductResponse>>(products));
     }
 
+
+    private async Task<IResult> UpdateProduct(HttpContext context, ISender mediatr,
+     IMapper mapper, int id, UpdateProductRequest request)
+    {
+        var updateCommand = mapper.Map<UpdateProductCommand>((request, id));
+        var productResult = await mediatr.Send(updateCommand);
+
+        return productResult.Match(
+              //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
+              product => TypedResults.Ok(mapper.Map<ProductResponse>(product)),
+              errors => ResultsProblem(context, errors)
+          );
+    }
 
 }

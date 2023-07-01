@@ -11,5 +11,9 @@ public static partial class Errors
         //category not found
         public static Error CategoryNotFound =>
         Error.Validation(code: "CategoryNotFound", description: "Category not found");
+
+        //product not found
+        public static Error ProductNotFound =>
+        Error.Validation(code: "ProductNotFound", description: "Product not found");
     }
 }
