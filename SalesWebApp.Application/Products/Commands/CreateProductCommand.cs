@@ -1,5 +1,7 @@
 using ErrorOr;
 using MediatR;
+using SalesWebApp.Application.Abstractions.Repositories;
+using SalesWebApp.Domain.Common.DomainErrors;
 using SalesWebApp.Domain.Common.ValueObjects;
 using SalesWebApp.Domain.ProductEntity;
 using SalesWebApp.Domain.ProductEntity.Entities;
@@ -22,8 +24,31 @@ public record CreateProductCommand(
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ErrorOr<Product>>
 {
-    public Task<ErrorOr<Product>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    private readonly IUnitOfWork _unitOfWork;
+    public CreateProductCommandHandler(IUnitOfWork unitOfWork)
     {
-        throw new NotImplementedException();
+        _unitOfWork = unitOfWork;
+    }
+    public async Task<ErrorOr<Product>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    {
+        var product = Product.Create(
+            request.Name,
+            request.Description,
+            request.ProjectOwnerPrice,
+            request.SalesmanPrice,
+            request.CustomerPrice,
+            request.Quantity,
+            request.CategoryId,
+            request.IsAvailable,
+            request.ProductSpecifications,
+            request.Thumbnail
+        );
+
+
+
+        await _unitOfWork.Products.AddAsync(product);
+        await _unitOfWork.SaveChangesAsync();
+        return product;
+
     }
 }

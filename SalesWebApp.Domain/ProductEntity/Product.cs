@@ -63,7 +63,7 @@ public class Product : BaseEntity<int>
 
 
 
-    public static ErrorOr<Product> Create(
+    public static Product Create(
         string name,
         string description,
         Price projectOwnerPrice,
@@ -75,10 +75,10 @@ public class Product : BaseEntity<int>
         List<ProductSpecification> productSpecifications,
         string thumbnail)
     {
-        if (!productSpecifications.Any())
-        {
-            return Errors.Product.MustHaveSpecification;
-        }
+        // if (!productSpecifications.Any())
+        // {
+        //     return Errors.Product.MustHaveSpecification;
+        // }
 
         var product = new Product(
             name,
