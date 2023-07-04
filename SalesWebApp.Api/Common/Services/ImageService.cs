@@ -57,14 +57,14 @@ public class ImageService : IImageService
 
         //images/jpg
         using Image input = Image.Load(filePath);
-        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(457, 666) }));
+        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Stretch, Size = new Size(457, 666) }));
 
         await input.SaveAsync(folderBig);
 
-        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(518, 388) }));
+        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Stretch, Size = new Size(518, 388) }));
         await input.SaveAsync(folderMedi);
 
-        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(340, 220) }));
+        input.Mutate(x => x.Resize(new ResizeOptions { Mode = ResizeMode.Stretch, Size = new Size(340, 220) }));
         await input.SaveAsync(folderSmall);
     }
 
@@ -130,7 +130,7 @@ public class ImageService : IImageService
             input.Mutate(x => x.Resize(new ResizeOptions
             {
                 Size = new Size(199, 131),
-                Mode = ResizeMode.Max
+                Mode = ResizeMode.Stretch
             }));
             await input.SaveAsync(folderSmall);
 
@@ -178,7 +178,7 @@ public class ImageService : IImageService
             input.Mutate(x => x.Resize(new ResizeOptions
             {
                 Size = new Size(width, height),
-                Mode = ResizeMode.Max
+                Mode = ResizeMode.Stretch
             }));
             await input.SaveAsync(customFolder);
 
