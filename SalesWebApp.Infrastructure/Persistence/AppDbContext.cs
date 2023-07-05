@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SalesWebApp.Domain.AppUserEntity;
 using SalesWebApp.Domain.ProductCategoryEntity;
 using SalesWebApp.Domain.ProductEntity;
 
 namespace SalesWebApp.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<AppUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

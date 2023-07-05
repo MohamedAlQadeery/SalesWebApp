@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols;
 using SalesWebApp.Application.Abstractions.Repositories;
+using SalesWebApp.Domain.AppUserEntity;
 using SalesWebApp.Infrastructure.Persistence;
 using SalesWebApp.Infrastructure.Persistence.Repositories;
 
@@ -24,20 +26,21 @@ public static class DependencyInjection
             opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
 
-        // services.AddScoped<AppDbContextInitialiser>();
+        services.AddScoped<AppDbContextInitialiser>();
 
-        // // Add Identity services
-        // services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-        // {
-        //     options.Password.RequireDigit = false;
-        //     options.Password.RequireLowercase = false;
-        //     options.Password.RequireUppercase = false;
-        //     options.Password.RequireNonAlphanumeric = false;
-        //     options.Password.RequiredLength = 6;
-        //     options.SignIn.RequireConfirmedEmail = false;
-        // })
-        // .AddEntityFrameworkStores<AppDbContext>()
-        // .AddDefaultTokenProviders();
+        // Add Identity services
+        services.AddIdentity<AppUser, IdentityRole>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequiredLength = 6;
+            options.SignIn.RequireConfirmedEmail = false;
+        })
+        .AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();
+
 
         services
             //  .AddAuth(configuration)
